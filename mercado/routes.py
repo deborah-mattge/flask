@@ -1,9 +1,9 @@
 from mercado import app
 from flask import render_template, redirect, url_for, flash
 from mercado.models import Item, User
-from mercado.forms import CadastroForm, LoginForm
+from mercado.forms import CadastroForm, LoginForm, CompraProdutoForm
 from mercado import db
-from flask_login import login_user
+from flask_login import login_user, logout_user, login_required
 
 
 @app.route('/')
@@ -12,9 +12,11 @@ def page_home():
 
 
 @app.route('/produtos')
+@login_required
 def page_produtos():
+    compra_form = CompraProdutoForm()
     itens = Item.query.all()
-    return render_template('produtos.html', itens=itens)
+    return render_template('produtos.html', itens=itens, compra_form=compra_form)
 
 
 @app.route('/cadastro', methods=['GET', 'POST'])
@@ -44,7 +46,13 @@ def page_login():
         if usuario_logado and usuario_logado.converte_senha(senha_texto_claro=form.senha.data):
             login_user(usuario_logado)
             flash(f'Sucesso! Seu login é: {usuario_logado.usuario}', category='sucess')
-            return redirect(url_for('page_produto'))
+            return redirect(url_for('page_produtos'))
         else:
             flash(f'Usuário ou senha estão incorretos" Tente novamente.', category='danger')
     return render_template('login.html', form=form)
+
+@app.route('/logout')
+def page_logout():
+    logout_user()
+    flash("Você fez o logout", category="info")
+    return redirect(url_for("page_home"))

@@ -14,6 +14,12 @@ class User(db.Model, UserMixin):
     valor = db.Column(db.Integer, nullable=False, default=5000)
     itens = db.relationship('Item', backref='dono_user', lazy=True)
 
+    @property
+    def formataValor(self):
+        if len(str(self.valor)) >= 4: # R$ 400
+            return f"R$ {str(self.valor)[:-3]}, {str(self.valor)[:-3]}"
+        else:
+            return f"R$ {self.valor}"
 
     @property
     def senhacrip(self):
