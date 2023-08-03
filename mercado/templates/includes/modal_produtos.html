@@ -30,7 +30,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                <form method="POST">
+              <form method="POST">
                     {{ compra_form.hidden_tag() }}
                     <h4>
                         Deseja comprar o produto {{ item.nome }} por R$ {{ item.preco }}?
@@ -40,6 +40,7 @@
                         Clique no botão comprar para comprar esse produto
                     </h6>
                     <br>
+                    <input id="compra_produtos" name="compra_produtos" type="hidden" value="{{item.nome}}">
                     {{ compra_form.submit(class="btn btn-outline-success btn-block") }}
                 </form>
             </div>

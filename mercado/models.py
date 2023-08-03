@@ -31,6 +31,9 @@ class User(db.Model, UserMixin):
         self.senha = bcrypt.generate_password_hash(senha_texto).decode('utf-8')
     def converte_senha(self, senha_texto_claro):
         return bcrypt.check_password_hash(self.senha, senha_texto_claro)
+    
+    def compra_disponivel(self, produto_obj):
+        return self.valor >= produto_obj.preco
 
 
 class Item(db.Model):
@@ -43,3 +46,8 @@ class Item(db.Model):
 
     def __repr__(self):
         return f"Item {self.nome}"
+    
+    def compra(self,usuario):
+        self.dono = usuario.id
+        usuario.valor -= self.preco
+        db.session.commit()

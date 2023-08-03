@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {%for item in itens %}
+                    {% for item in itens %}
                     {% include 'includes/modal_produtos.html' %}
                     <tr>
                         <td>{{item.id}}</td>
@@ -31,7 +31,11 @@
                         <td>{{item.preco}}</td>
                         <td>
                             <button data-bs-toggle="modal" data-bs-target="#exampleModal-{{item.id}}" class="btn btn-outline btn-info">Mais informações</button>
-                            <button data-bs-toggle="modal" data-bs-target="#exampleModalCompra-{{item.id}}" class="btn btn-outline btn-success">Comprar esse produto</button>
+                            <form method="POST" action="{{ url_for('page_produtos') }}">
+                                {{ compra_form.hidden_tag() }}
+                                <input id="compra_produtos" name="compra_produtos" type="hidden" value="{{item.nome}}">
+                                {{ compra_form.submit(class="btn btn-outline btn-success") }}
+                            </form>
                         </td>
                     </tr>
                     {% endfor %}
@@ -40,10 +44,22 @@
         </div>
         <div class="col-4">
             <h2>Produtos adquiridos</h2>
-            <p>Clique em devolver o item caso tenha iteresse</p>
+            <p>Clique em devolver o item caso tenha interesse</p>
             <hr>
+            { % for dono_item in dono_itens % }
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card text-center bg-dark" style="width: 18rem;">
+                        <div class="card-body">
+                          <h5 class="card-title">Card title</h5>
+                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                          <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                      </div>
+
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}
-
-    
